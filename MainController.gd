@@ -114,13 +114,39 @@ func _on_StepTimer_timeout():
 	print("Timer")
 	if algoObj:
 		algoObj.next_step()
-		$output.set_text(JSON.print(algoObj.table))
+		#$output.set_text(JSON.print(algoObj.table))
 		
 
 func _on_VBoxContainer_should_stop_signal():
 	$StepTimer.stop()
 	print("STOP SIGNAL REGISTERED")
 	
+	var fin=""
+	var j=algoObj.table[0].size()-1
+	var i=algoObj.table.size()-1
+	while(true):
+		if(j==0 or i==0):
+			if algoObj.table[i][j] > 0:
+				while(i>0 && algoObj.table[i-1][j]>0):
+					i=i-1
+				while(j>0 && algoObj.table[i][j-1]>0):
+					j=j-1
+				fin=algoObj.strb[i]+fin
+			break
+		
+		if(algoObj.table[i-1][j]==algoObj.table[i][j]):
+			i=i-1
+			continue
+			
+		if(algoObj.table[i][j-1]==algoObj.table[i][j]):
+			j=j-1
+			continue
+			
+		fin=algoObj.strb[i]+fin
+		i=i-1
+		j=j-1
+	$output.text=fin
+
 
 
 func _on_VBoxContainer_update_table(ca,cb, value):
